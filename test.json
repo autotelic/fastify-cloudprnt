@@ -1,0 +1,10 @@
+{
+    "status": "23 6 0 0 0 0 0 0 0 ",
+    "printerMAC": "00:11:e5:06:04:ff",
+    "uniqueID": "Star1",
+    "statusCode": "200%20OK",
+    "clientAction": [
+      {"request":"GetPollInterval","result":"10"},
+      {"request":"Encodings","result":"image/png; image/jpeg; application/vnd.star.raster;application/vnd.star.line; application/vnd.star.linematrix; text/plain; application/octet-stream"}
+    ]
+}
