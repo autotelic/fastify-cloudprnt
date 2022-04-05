@@ -24,16 +24,15 @@ async function fastifyCloudPrnt (fastify, options) {
   }
 
   fastify.post('/', { schema }, async (request, reply) => {
-    console.log(request.body)
     reply.send({
-      jobReady: false,
-      clientAction: [
-        { request: 'ClientType', options: '' },
-        { request: 'ClientVersion', options: '' },
-        { request: 'Encodings', options: '' },
-        { request: 'GetPollInterval', options: '' },
-        { request: 'PageInfo', options: '' }
-      ]
+      jobReady: false
+      // clientAction: [
+      //   { request: 'ClientType', options: '' },
+      //   { request: 'ClientVersion', options: '' },
+      //   { request: 'Encodings', options: '' },
+      //   { request: 'GetPollInterval', options: '' },
+      //   { request: 'PageInfo', options: '' }
+      // ]
     })
   })
 }
