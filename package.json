@@ -27,6 +27,8 @@
   "homepage": "https://github.com/autotelic/fastify-plugin-template#readme",
   "dependencies": {
     "fastify-plugin": "^3.0.0",
+    "nunjucks": "^3.2.3",
+    "point-of-view": "^5.2.0",
     "superchild": "^0.1.10"
   },
   "devDependencies": {

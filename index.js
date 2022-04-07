@@ -1,47 +1,33 @@
 'use strict'
 
-const superchild = require('superchild')
+const pointOfView = require('point-of-view')
+const nunjucks = require('nunjucks')
+
+const pollRoute = require('./routes/main/post')
+const getJobRoute = require('./routes/main/get')
 
 async function fastifyCloudPrnt (fastify, options) {
-  const schema = {
-    body: {
-      type: 'object',
-      required: ['statusCode'],
-      properties: {
-        statusCode: { type: 'string' }
-      }
-    },
-    response: {
-      200: {
-        type: 'object',
-        required: ['jobReady'],
-        properties: {
-          jobReady: { type: 'boolean' },
-          mediaTypes: { type: 'array' },
-          clientAction: { type: 'array' },
-          jobToken: { type: 'string' }
-        }
-      }
-    }
+
+  const defaultOptions = {
+    getJob: () => null,
+    getJobData: () => {}
   }
 
-  fastify.post('/', { schema }, async (request, reply) => {
-    const child = superchild('cputil supportedinputs')
-    child.on('stdout_line', function (line) {
-      console.log('[stdout]: ', line)
-    })
+  const {
+    getJob,
+    getJobData
+  } = {
+    ...defaultOptions,
+    ...options
+  }
 
-    reply.send({
-      jobReady: false
-      // clientAction: [
-      //   { request: 'ClientType', options: '' },
-      //   { request: 'ClientVersion', options: '' },
-      //   { request: 'Encodings', options: '' },
-      //   { request: 'GetPollInterval', options: '' },
-      //   { request: 'PageInfo', options: '' }
-      // ]
-    })
-  })
+  fastify.register(pointOfView, { engine: { nunjucks } })
+
+  fastify.decorate('getJob', getJob)
+  fastify.decorate('getJobData', getJobData)
+
+  fastify.route(pollRoute)
+  fastify.route(getJobRoute)
 }
 
 module.exports = fastifyCloudPrnt
