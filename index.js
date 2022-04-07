@@ -1,5 +1,7 @@
 'use strict'
 
+const superchild = require('superchild')
+
 async function fastifyCloudPrnt (fastify, options) {
   const schema = {
     body: {
@@ -24,6 +26,11 @@ async function fastifyCloudPrnt (fastify, options) {
   }
 
   fastify.post('/', { schema }, async (request, reply) => {
+    const child = superchild('cputil supportedinputs')
+    child.on('stdout_line', function (line) {
+      console.log('[stdout]: ', line)
+    })
+
     reply.send({
       jobReady: false
       // clientAction: [

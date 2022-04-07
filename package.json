@@ -26,7 +26,8 @@
   },
   "homepage": "https://github.com/autotelic/fastify-plugin-template#readme",
   "dependencies": {
-    "fastify-plugin": "^3.0.0"
+    "fastify-plugin": "^3.0.0",
+    "superchild": "^0.1.10"
   },
   "devDependencies": {
     "ava": "^3.15.0",
