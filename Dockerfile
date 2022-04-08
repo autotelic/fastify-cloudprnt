@@ -13,6 +13,8 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
 WORKDIR /usr/src/app
 COPY index.js .
+COPY routes routes
+COPY templates templates
 COPY package.json .
 RUN npm install
 
