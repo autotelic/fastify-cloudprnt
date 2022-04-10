@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Plugin for fastify",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "test": "test"
   },
@@ -27,10 +28,10 @@
   "homepage": "https://github.com/autotelic/fastify-plugin-template#readme",
   "dependencies": {
     "@rauschma/stringio": "^1.4.0",
+    "execa": "^6.1.0",
     "fastify-plugin": "^3.0.0",
     "nunjucks": "^3.2.3",
-    "point-of-view": "^5.2.0",
-    "superchild": "^0.1.10"
+    "point-of-view": "^5.2.0"
   },
   "devDependencies": {
     "ava": "^3.15.0",

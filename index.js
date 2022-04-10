@@ -1,10 +1,10 @@
 'use strict'
 
-const pointOfView = require('point-of-view')
-const nunjucks = require('nunjucks')
+import pointOfView from 'point-of-view'
+import nunjucks from 'nunjucks'
 
-const pollRoute = require('./routes/main/post')
-const getJobRoute = require('./routes/main/get')
+import pollRoute from './routes/main/post.js'
+import getJobRoute from './routes/main/get.js'
 
 async function fastifyCloudPrnt (fastify, options) {
 
@@ -30,4 +30,4 @@ async function fastifyCloudPrnt (fastify, options) {
   fastify.route(getJobRoute)
 }
 
-module.exports = fastifyCloudPrnt
+export default fastifyCloudPrnt

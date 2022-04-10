@@ -1,7 +1,7 @@
-const fs = require('fs')
-const superchild = require('superchild')
+import fs from 'fs'
+import { execaCommand } from 'execa'
 
-module.exports = {
+export default {
   method: 'GET',
   url: '/',
   schema: {
@@ -25,19 +25,15 @@ module.exports = {
 
     const fileName = `/tmp/${token}.stm`
     fs.writeFileSync(fileName, renderedJob, { flag: 'w+' })
+    const mimeType = 'application/vnd.star.starprntcore'
 
-    console.log(fileName)
+    const subprocess = await execaCommand(
+      `cputil decode ${mimeType} ${fileName} -`,
+      { encoding: null }
+    )
 
-    const child = superchild(`cputil decode application/vnd.star.starprntcore ${fileName} -`)
-    child.on('stderr_data', function (line) {
-      console.log('[sterr]: ', line)
-    })
-    child.on('stdout_line', function (line) {
-      console.log('[stdout]: ', line)
-    })
-
-    reply.send({
-      foo: 'bar'
-    })
+    reply
+      .type(mimeType)
+      .send(subprocess.stdout)
   }
 }
