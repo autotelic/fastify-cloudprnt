@@ -1,12 +1,13 @@
 export default {
   method: 'DELETE',
-  url: '/job',
+  url: '/',
   schema: {
-    body: {
+    querystring: {
       type: 'object',
       required: ['token'],
       properties: {
-        token: { type: 'string' }
+        token: { type: 'string' },
+        code: { type: 'string' }
       }
     },
     response: {
@@ -20,9 +21,9 @@ export default {
     }
   },
   handler: async function queueJobHandler (request, reply) {
-    const { token } = request.body
+    const { token } = request.query
     const deleted = this.deleteJob(token)
-    const code = deleted === 0
+    const code = deleted
       ? 404
       : 200
     reply

@@ -6,7 +6,7 @@ import nunjucks from 'nunjucks'
 import pollRoute from './routes/main/post.js'
 import getJobRoute from './routes/main/get.js'
 import queueJobRoute from './routes/job/post.js'
-import deleteJobRoute from './routes/job/delete.js'
+import deleteJobRoute from './routes/main/delete.js'
 
 async function fastifyCloudPrnt (fastify, options) {
   const defaultOptions = {

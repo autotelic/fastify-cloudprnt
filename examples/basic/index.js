@@ -10,7 +10,13 @@ export default async function basic (fastify, options) {
       const token = printQueue.keys().reverse().find(Boolean)
       return token === undefined ? null : token
     },
-    getJobData: key => printQueue.get(key),
-    deleteJob: key => printQueue.del(key)
+    getJobData: key => {
+      const jobData = printQueue.get(key)
+      return jobData === undefined ? null : jobData
+    },
+    deleteJob: key => {
+      const deleted = printQueue.del(key)
+      return deleted > 0
+    }
   })
 }
