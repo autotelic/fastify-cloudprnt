@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "fastify start -w -l info -P -o index.js",
+    "example:basic": "fastify start -w -l info -P -o examples/basic/index.js",
     "test": "c8 --100 ava",
     "lint": "standard",
     "fix": "standard --fix",
@@ -40,6 +41,7 @@
     "fastify-cli": "^2.15.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.2",
+    "node-cache": "^5.1.2",
     "standard": "^16.0.3"
   },
   "lint-staged": {

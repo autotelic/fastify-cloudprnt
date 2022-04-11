@@ -20,8 +20,8 @@ export default {
   },
   handler: async function getJobHandler (request, reply) {
     const { token } = request.query
-    const jobData = await this.getJobData(token)
-    const renderedJob = await this.view('templates/receipt.stm', { token })
+    const jobData = await this.getJob(token)
+    const renderedJob = await this.view('templates/receipt.stm', jobData)
 
     const fileName = `/tmp/${token}.stm`
     fs.writeFileSync(fileName, renderedJob, { flag: 'w+' })
