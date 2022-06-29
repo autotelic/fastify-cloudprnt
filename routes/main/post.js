@@ -24,20 +24,23 @@ export default {
   },
   handler: async function pollHandler (request, reply) {
     const jobToken = await this.getJob()
-    const jobReady = jobToken === null
-      ? false
-      : true
+    const jobReady = jobToken !== null
 
     let jobReadyResponse = {}
     if (jobReady) {
       jobReadyResponse = {
         jobToken,
+        mediaTypes: [
+          'application/vnd.star.starprntcore'
+        ]
       }
     }
 
-    reply.send({
+    const finalResponse = {
       jobReady,
-      ...jobReadyResponse,
-    })
+      ...jobReadyResponse
+    }
+
+    reply.send(finalResponse)
   }
 }
