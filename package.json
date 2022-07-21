@@ -37,7 +37,7 @@
   "devDependencies": {
     "ava": "^4.3.0",
     "c8": "^7.10.0",
-    "fastify": "^3.0.0",
+    "fastify": "^4.3.0",
     "fastify-cli": "^4.2.0",
     "husky": "^8.0.1",
     "lint-staged": "^12.1.2",
