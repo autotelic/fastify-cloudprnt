@@ -5,17 +5,17 @@ export default async function basic (fastify, options) {
   const printQueue = new NodeCache()
 
   fastify.register(fastifyCloudPrnt, {
-    queueJob: (key, val) => printQueue.set(key, val),
+    queueJob: (token, jobData) => printQueue.set(token, jobData),
     getJob: () => {
       const token = printQueue.keys().reverse().find(Boolean)
       return token === undefined ? null : token
     },
-    getJobData: key => {
-      const jobData = printQueue.get(key)
+    getJobData: token => {
+      const jobData = printQueue.get(token)
       return jobData === undefined ? null : jobData
     },
-    deleteJob: key => {
-      const deleted = printQueue.del(key)
+    deleteJob: token => {
+      const deleted = printQueue.del(token)
       return deleted > 0
     }
   })
