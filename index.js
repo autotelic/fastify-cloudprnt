@@ -8,14 +8,14 @@ import getJobRoute from './routes/main/get.js'
 import queueJobRoute from './routes/job/post.js'
 import deleteJobRoute from './routes/main/delete.js'
 
-async function fastifyCloudPrnt (fastify, options) {
-  const defaultOptions = {
-    getJob: () => null,
-    getJobData: () => {},
-    queueJob: () => false,
-    deleteJob: () => false
-  }
+export const defaultOptions = {
+  getJob: () => null,
+  getJobData: () => ({}),
+  queueJob: () => false,
+  deleteJob: () => false
+}
 
+async function fastifyCloudPrnt (fastify, options = defaultOptions) {
   const {
     getJob,
     getJobData,

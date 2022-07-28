@@ -37,11 +37,12 @@
   "devDependencies": {
     "ava": "^4.3.0",
     "c8": "^7.10.0",
-    "fastify": "^3.0.0",
+    "fastify": "^4.3.0",
     "fastify-cli": "^4.2.0",
     "husky": "^8.0.1",
     "lint-staged": "^12.1.2",
     "node-cache": "^5.1.2",
+    "sinon": "^14.0.0",
     "standard": "^17.0.0"
   },
   "lint-staged": {

@@ -24,8 +24,8 @@ export default {
     const { token } = request.query
     const deleted = this.deleteJob(token)
     const code = deleted
-      ? 404
-      : 200
+      ? 200
+      : 404
     reply
       .code(code)
       .send({ token })
