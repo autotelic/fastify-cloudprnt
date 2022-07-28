@@ -17,6 +17,7 @@ export default async function basic (fastify, options) {
     deleteJob: token => {
       const deleted = printQueue.del(token)
       return deleted > 0
-    }
+    },
+    viewOptions: { root: './examples' }
   })
 }

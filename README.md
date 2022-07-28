@@ -47,3 +47,4 @@ _@autotelic/fastify-cloudprnt_ exports a fastify plugin. When registered the plu
 * `getJob: () => token`: method that returns the url-safe string `token` for the next available print job on the queue.
 * `getJobData: (token) => object`: method that returns the data object for the job enqueued with the url-safe string `token`.
 * `deleteJob: (token) => any`: method that deletes the job enqueued with the url-safe string `token` from the print queue.
+* `viewOptions: object`: object containing configuration options to be passed through to [point-of-view](https://github.com/fastify/point-of-view#options). The default option provided by this plugin is `engine: { nunjucks }`.

@@ -58,7 +58,8 @@ test('get job, success', async (t) => {
   const fastify = Fastify()
 
   fastify.register(fastifyCloudPrnt, {
-    getJobData: (token) => ({})
+    getJobData: (token) => ({}),
+    viewOptions: { root: './examples' }
   })
   await fastify.ready()
 

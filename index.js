@@ -8,11 +8,14 @@ import getJobRoute from './routes/main/get.js'
 import queueJobRoute from './routes/job/post.js'
 import deleteJobRoute from './routes/main/delete.js'
 
+const defaultViewOptions = { engine: { nunjucks } }
+
 export const defaultOptions = {
   getJob: () => null,
   getJobData: () => ({}),
   queueJob: () => false,
-  deleteJob: () => false
+  deleteJob: () => false,
+  viewOptions: defaultViewOptions
 }
 
 async function fastifyCloudPrnt (fastify, options = defaultOptions) {
@@ -20,13 +23,17 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     getJob,
     getJobData,
     queueJob,
-    deleteJob
+    deleteJob,
+    viewOptions
   } = {
     ...defaultOptions,
     ...options
   }
 
-  fastify.register(pointOfView, { engine: { nunjucks } })
+  fastify.register(pointOfView, {
+    ...defaultViewOptions,
+    ...viewOptions
+  })
 
   fastify.decorate('getJob', getJob)
   fastify.decorate('getJobData', getJobData)
