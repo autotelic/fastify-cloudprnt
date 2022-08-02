@@ -1,18 +1,15 @@
-name: test
+name: Run linter & tests
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_call:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x]
+        node-version: [14.x, 16.x, 18.x]
 
     name: Node.js ${{ matrix.node }}
 
