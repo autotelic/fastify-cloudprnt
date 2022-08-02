@@ -28,11 +28,11 @@
   },
   "homepage": "https://github.com/autotelic/fastify-plugin-template#readme",
   "dependencies": {
+    "@fastify/view": "^7.0.0",
     "@rauschma/stringio": "^1.4.0",
     "execa": "^6.1.0",
     "fastify-plugin": "^4.0.0",
-    "nunjucks": "^3.2.3",
-    "point-of-view": "^6.3.0"
+    "nunjucks": "^3.2.3"
   },
   "devDependencies": {
     "ava": "^4.3.0",

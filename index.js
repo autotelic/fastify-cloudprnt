@@ -1,6 +1,6 @@
 'use strict'
 
-import pointOfView from 'point-of-view'
+import view from '@fastify/view'
 import nunjucks from 'nunjucks'
 
 import pollRoute from './routes/main/post.js'
@@ -30,7 +30,7 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     ...options
   }
 
-  fastify.register(pointOfView, {
+  fastify.register(view, {
     ...defaultViewOptions,
     ...viewOptions
   })
