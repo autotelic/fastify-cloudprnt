@@ -68,7 +68,9 @@ test('get job, success', async (t) => {
     url: `/?token=${jobToken}`
   })
 
-  t.is(response.statusCode, 200)
+  // t.is(response.statusCode, 200)
+  t.is(response.statusMessage, 'OK')
+  console.log(response.body)
   t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
 })
 
