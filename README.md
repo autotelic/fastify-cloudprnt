@@ -37,7 +37,7 @@ See [examples](examples/) for working examples.
 
 ### Template Rendering
 
-Templates should be in [Star Document Markup](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/markup/markupintro.html), and template rendering requires [`cputil`](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/cputil/cputil.html) to be in the path. The provided[Dockerfile](Dockerfile) builds a container with the app and `cputil` in.
+Templates should be in [Star Document Markup](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/markup/markupintro.html), and template rendering requires [`cputil`](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/cputil/cputil.html) to be in the path. The provided [Dockerfile](Dockerfile) builds a container with the app and `cputil` in.
 
 ## API
 

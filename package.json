@@ -31,6 +31,7 @@
     "@fastify/view": "^7.0.0",
     "@rauschma/stringio": "^1.4.0",
     "execa": "^6.1.0",
+    "fastify-cli": "^4.4.0",
     "fastify-plugin": "^4.0.0",
     "nunjucks": "^3.2.3"
   },
@@ -38,7 +39,6 @@
     "ava": "^4.3.0",
     "c8": "^7.10.0",
     "fastify": "^4.3.0",
-    "fastify-cli": "^4.2.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "node-cache": "^5.1.2",
