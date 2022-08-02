@@ -30,7 +30,7 @@
   "dependencies": {
     "@rauschma/stringio": "^1.4.0",
     "execa": "^6.1.0",
-    "fastify-plugin": "^3.0.0",
+    "fastify-plugin": "^4.0.0",
     "nunjucks": "^3.2.3",
     "point-of-view": "^6.3.0"
   },
