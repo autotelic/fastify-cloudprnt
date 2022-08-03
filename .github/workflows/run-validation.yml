@@ -5,7 +5,8 @@ on:
 
 jobs:
   test:
-    runs-on: autotelic/cputil
+    runs-on: ubuntu-latest
+    container: autotelic/cputil
 
     strategy:
       matrix:
