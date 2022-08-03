@@ -35,7 +35,7 @@ export default {
       { encoding: null }
     )
 
-    reply
+    return reply
       .type(mimeType)
       .send(subprocess.stdout)
   }

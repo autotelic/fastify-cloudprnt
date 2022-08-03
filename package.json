@@ -8,13 +8,11 @@
     "test": "test"
   },
   "scripts": {
-    "dev": "fastify start -w -l info -P -o index.js",
     "example:basic": "fastify start -w -l info -P -o examples/basic/index.js",
     "test": "c8 --100 ava",
     "lint": "standard",
     "fix": "standard --fix",
-    "validate": "npm run lint && npm run test",
-    "postinstall": "husky install"
+    "validate": "npm run lint && npm run test"
   },
   "repository": {
     "type": "git",
@@ -31,7 +29,7 @@
     "@fastify/view": "^7.0.0",
     "@rauschma/stringio": "^1.4.0",
     "execa": "^6.1.0",
-    "fastify-cli": "^4.4.0",
+    "fastify-cli": "^3.1.0",
     "fastify-plugin": "^4.0.0",
     "nunjucks": "^3.2.3"
   },

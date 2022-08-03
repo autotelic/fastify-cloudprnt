@@ -26,7 +26,7 @@ export default {
     const code = deleted
       ? 200
       : 404
-    reply
+    return reply
       .code(code)
       .send({ token })
   }

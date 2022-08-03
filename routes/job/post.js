@@ -23,7 +23,7 @@ export default {
   handler: async function queueJobHandler (request, reply) {
     const { token, jobData } = request.body
     this.queueJob(token, jobData)
-    reply
+    return reply
       .code(201)
       .send({ token })
   }

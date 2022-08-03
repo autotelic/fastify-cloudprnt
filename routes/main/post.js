@@ -41,6 +41,6 @@ export default {
       ...jobReadyResponse
     }
 
-    reply.send(finalResponse)
+    return reply.send(finalResponse)
   }
 }
