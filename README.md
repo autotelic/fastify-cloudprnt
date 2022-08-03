@@ -2,6 +2,10 @@
 
 A fastify plugin to run a server that follows the [Star Micronics CloudPRNT protocol](https://www.star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/developerguide/introduction.html).
 
+## Commit linting with Husky
+
+The npm postinstall script has been removed as it fails on the GH action runner. If you would like lint-staged to run on each commit, run `husky install` manually.
+
 ## Usage
 
 ```js
