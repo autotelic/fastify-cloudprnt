@@ -29,7 +29,7 @@
     "@fastify/view": "^7.0.0",
     "@rauschma/stringio": "^1.4.0",
     "execa": "^6.1.0",
-    "fastify-cli": "^3.1.0",
+    "fastify-cli": "^4.4.0",
     "fastify-plugin": "^4.0.0",
     "nunjucks": "^3.2.3"
   },
