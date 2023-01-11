@@ -8,7 +8,10 @@
     "test": "test"
   },
   "scripts": {
-    "example:basic": "fastify start -w -l info -P -o examples/basic/index.js",
+    "example:basic": "docker compose -f docker-compose.basic-example.yaml up",
+    "example:basic:start": "fastify start -w -l info -P -o examples/basic/index.js",
+    "example:redis": "docker compose -f docker-compose.redis-example.yaml up",
+    "example:redis:start": "fastify start -w -l info -P -o examples/redis/index.js",
     "test": "c8 --100 ava",
     "lint": "standard",
     "fix": "standard --fix",
