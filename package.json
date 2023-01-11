@@ -40,6 +40,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "node-cache": "^5.1.2",
+    "redis": "^4.5.1",
     "sinon": "^14.0.0",
     "standard": "^17.0.0"
   },
