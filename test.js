@@ -183,12 +183,10 @@ test('should prefix routes when supplied with a routePrefix opt', async t => {
   const fastify = Fastify()
 
   const queueJob = sinon.spy()
-  const getJob = sinon.spy()
 
   fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, {
     queueJob,
-    getJob,
     routePrefix: prefix
   })
   await fastify.ready()

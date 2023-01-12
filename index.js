@@ -26,13 +26,12 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     ...options
   }
 
-  const cloudPrnt = {
+  fastify.decorate('cloudPrnt', {
     getJob,
     getJobData,
     queueJob,
     deleteJob
-  }
-  fastify.decorate('cloudPrnt', cloudPrnt)
+  })
 
   fastify.register(async function (f) {
     f.route(pollRoute)
