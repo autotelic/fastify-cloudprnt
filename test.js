@@ -1,7 +1,12 @@
 import test from 'ava'
 import sinon from 'sinon'
 import Fastify from 'fastify'
+import view from '@fastify/view'
+import nunjucks from 'nunjucks'
+
 import fastifyCloudPrnt, { defaultOptions } from './index.js'
+
+const defaultViewOpts = { engine: { nunjucks } }
 
 test('default options', async (t) => {
   t.deepEqual(defaultOptions.getJobData(), {})
@@ -13,6 +18,7 @@ test('default options', async (t) => {
 test('client poll, no job ready', async (t) => {
   const fastify = Fastify()
 
+  fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt)
   await fastify.ready()
 
@@ -31,6 +37,7 @@ test('client poll, job ready', async (t) => {
   const jobToken = 'ABC123'
   const fastify = Fastify()
 
+  fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, {
     getJob: () => jobToken
   })
@@ -57,6 +64,10 @@ test('get job, success', async (t) => {
   const jobToken = 'ABC123'
   const fastify = Fastify()
 
+  fastify.register(view, {
+    ...defaultViewOpts,
+    root: './examples'
+  })
   fastify.register(fastifyCloudPrnt, {
     getJobData: (token) => ({}),
     viewOptions: { root: './examples' }
@@ -77,6 +88,7 @@ test('get job, not found', async (t) => {
   const jobToken = 'ABC123'
   const fastify = Fastify()
 
+  fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, {
     getJobData: (token) => null
   })
@@ -97,6 +109,7 @@ test('delete job, success', async (t) => {
 
   const deleteJob = sinon.stub().returns(true)
 
+  fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, { deleteJob })
   await fastify.ready()
 
@@ -116,6 +129,7 @@ test('delete job, not found', async (t) => {
 
   const deleteJob = sinon.stub().returns(false)
 
+  fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, { deleteJob })
   await fastify.ready()
 
@@ -136,6 +150,7 @@ test('queue job', async (t) => {
 
   const queueJob = sinon.spy()
 
+  fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, { queueJob })
   await fastify.ready()
 
@@ -151,4 +166,53 @@ test('queue job', async (t) => {
   t.true(queueJob.calledWith(token, jobData))
   t.is(response.statusCode, 201)
   t.deepEqual(response.json(), { token })
+})
+
+test('should throw an error if @fastify/view is not registered', async t => {
+  const fastify = Fastify()
+  const register = async () => {
+    await fastify.register(fastifyCloudPrnt)
+  }
+  await t.throwsAsync(register)
+})
+
+test('should prefix routes when supplied with a routePrefix opt', async t => {
+  const token = 'ABC123'
+  const jobData = { foo: 'bar' }
+  const prefix = '/test'
+  const fastify = Fastify()
+
+  const queueJob = sinon.spy()
+  const getJob = sinon.spy()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    queueJob,
+    getJob,
+    routePrefix: prefix
+  })
+  await fastify.ready()
+
+  const withPrefixResponse = await fastify.inject({
+    method: 'POST',
+    url: `${prefix}/job`,
+    body: {
+      token,
+      jobData
+    }
+  })
+
+  t.true(queueJob.calledWith(token, jobData))
+  t.is(withPrefixResponse.statusCode, 201)
+
+  const noPrefixResponse = await fastify.inject({
+    method: 'POST',
+    url: '/job',
+    body: {
+      token,
+      jobData
+    }
+  })
+
+  t.is(noPrefixResponse.statusCode, 404)
 })

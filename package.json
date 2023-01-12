@@ -13,6 +13,7 @@
     "example:redis": "docker compose -f docker-compose.redis-example.yaml up",
     "example:redis:start": "fastify start -w -l info -P -o examples/redis/index.js",
     "test": "c8 --100 ava",
+    "test:containerized": "docker compose -f docker-compose.test.yaml up",
     "lint": "standard",
     "fix": "standard --fix",
     "validate": "npm run lint && npm run test"
