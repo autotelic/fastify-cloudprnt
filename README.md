@@ -47,6 +47,8 @@ See [examples](examples/) for working examples.
 
 Templates should be in [Star Document Markup](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/markup/markupintro.html), and template rendering requires [`cputil`](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/cputil/cputil.html) to be in the path. The provided [Dockerfile](Dockerfile) builds a container with the app and `cputil` in. Additionally, [@fastify/view](https://github.com/fastify/point-of-view) must be registered to fastify before fastify-cloudprnt.
 
+Star Micronics provides a [Star Document Markup Designer](https://star-document-markup-designer.smcs.site/) web app.
+
 ## API
 
 _@autotelic/fastify-cloudprnt_ exports a fastify plugin. When registered the plugin expects a configuration object:
