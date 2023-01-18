@@ -23,7 +23,7 @@ export default {
     }
   },
   handler: async function pollHandler (request, reply) {
-    const jobToken = await this.getJob()
+    const jobToken = await this.cloudPrnt.getJob()
     const jobReady = jobToken !== null
 
     let jobReadyResponse = {}

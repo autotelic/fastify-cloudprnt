@@ -22,7 +22,7 @@ export default {
   },
   handler: async function queueJobHandler (request, reply) {
     const { token } = request.query
-    const deleted = this.deleteJob(token)
+    const deleted = this.cloudPrnt.deleteJob(token)
     const code = deleted
       ? 200
       : 404

@@ -1,7 +1,15 @@
 import NodeCache from 'node-cache'
+import view from '@fastify/view'
+import nunjucks from 'nunjucks'
+
 import fastifyCloudPrnt from '../../index.js'
 
 export default async function basic (fastify, options) {
+  await fastify.register(view, {
+    engine: { nunjucks },
+    root: './examples'
+  })
+
   const printQueue = new NodeCache()
 
   fastify.register(fastifyCloudPrnt, {
@@ -17,7 +25,6 @@ export default async function basic (fastify, options) {
     deleteJob: token => {
       const deleted = printQueue.del(token)
       return deleted > 0
-    },
-    viewOptions: { root: './examples' }
+    }
   })
 }

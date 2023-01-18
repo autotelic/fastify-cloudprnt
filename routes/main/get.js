@@ -20,7 +20,7 @@ export default {
   },
   handler: async function getJobHandler (request, reply) {
     const { token } = request.query
-    const jobData = await this.getJobData(token)
+    const jobData = await this.cloudPrnt.getJobData(token)
     if (jobData === null) {
       return reply.code(404).send('Job not found')
     }

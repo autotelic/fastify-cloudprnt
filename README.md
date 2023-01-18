@@ -10,9 +10,13 @@ The npm postinstall script has been removed as it fails on the GH action runner.
 
 ```js
 import fastifyCloudPrnt from '@autotelic/fastify-cloudprnt'
+import view from '@fastify/view'
 
 export default async function basic (fastify, options) {
-  fastify.register(fastifyCloudPrnt, config)
+  // @fastify/view must be registered and available before fastify/view
+  await fastify.register(view, viewConfig)
+
+  await fastify.register(fastifyCloudPrnt, config)
 }
 ```
 
@@ -41,7 +45,9 @@ See [examples](examples/) for working examples.
 
 ### Template Rendering
 
-Templates should be in [Star Document Markup](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/markup/markupintro.html), and template rendering requires [`cputil`](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/cputil/cputil.html) to be in the path. The provided [Dockerfile](Dockerfile) builds a container with the app and `cputil` in.
+Templates should be in [Star Document Markup](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/markup/markupintro.html), and template rendering requires [`cputil`](https://star-m.jp/products/s_print/CloudPRNTSDK/Documentation/en/articles/cputil/cputil.html) to be in the path. The provided [Dockerfile](Dockerfile) builds a container with the app and `cputil` in. Additionally, [@fastify/view](https://github.com/fastify/point-of-view) must be registered to fastify before fastify-cloudprnt.
+
+Star Micronics provides a [Star Document Markup Designer](https://star-document-markup-designer.smcs.site/) web app.
 
 ## API
 
@@ -51,4 +57,18 @@ _@autotelic/fastify-cloudprnt_ exports a fastify plugin. When registered the plu
 * `getJob: () => token`: method that returns the url-safe string `token` for the next available print job on the queue.
 * `getJobData: (token) => object`: method that returns the data object for the job enqueued with the url-safe string `token`.
 * `deleteJob: (token) => any`: method that deletes the job enqueued with the url-safe string `token` from the print queue.
-* `viewOptions: object`: object containing configuration options to be passed through to [point-of-view](https://github.com/fastify/point-of-view#options). The default option provided by this plugin is `engine: { nunjucks }`.
+* `routePrefix: string`: string which will configure a prefix for all cloudprint routes.
+
+## Examples
+
+### Basic
+An [example](./examples/basic/) fastify app using [node-cache](https://github.com/node-cache/node-cache). To run the basic example, use the following command:
+```sh
+  npm run example:basic
+```
+
+### Redis
+An [example](./examples/redis/) fastify app using [redis](https://www.npmjs.com/package/redis). To run the redis example, use the following command:
+```sh
+  npm run example:redis
+```
