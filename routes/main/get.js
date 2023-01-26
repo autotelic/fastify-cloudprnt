@@ -23,7 +23,7 @@ module.exports = {
     const { token } = request.query
     const {
       getJobData,
-      defaultTemplateName,
+      defaultTemplate,
       templatesDir
     } = this.cloudPrnt
 
@@ -32,8 +32,8 @@ module.exports = {
       return reply.code(404).send('Job not found')
     }
 
-    const templateName = jobData.templateName || defaultTemplateName
-    const templatePath = path.join(templatesDir, templateName)
+    const template = jobData.template || defaultTemplate
+    const templatePath = path.join(templatesDir, template)
     const renderedJob = await this.view(templatePath, jobData)
 
     const fileName = `/tmp/${token}.stm`

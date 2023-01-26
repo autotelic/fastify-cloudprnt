@@ -5,7 +5,7 @@
 [magnify: width 2; height 1]
 {{ token }}
 
-[magnify: width 3; height 2]Columns[magnify]
+[magnify: width 3; height 2]Receipt[magnify]
 [align: left]\
 [column: left: Item 1;      right: $10.00]
 [column: left: Item 2;      right: $9.95]

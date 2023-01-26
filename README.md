@@ -58,8 +58,8 @@ _@autotelic/fastify-cloudprnt_ exports a fastify plugin. When registered the plu
 * `getJobData: (token) => object`: method that returns the data object for the job enqueued with the url-safe string `token`.
 * `deleteJob: (token) => any`: method that deletes the job enqueued with the url-safe string `token` from the print queue.
 * `routePrefix: string`: string which will configure a prefix for all cloudprnt routes.
-* `defaultTemplateName`: string which will configure the default template name to be joined with `templatesDir` and used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to `receipt.stm`). If `jobData` contains a `templateName`, it will be used instead of the `defaultTemplateName`.
-* `templatesDir`: string which will configure the directory to be joined with either the `defaultTemplateName` or `jobData.templateName` used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to an empty string).
+* `defaultTemplate`: string which will configure the default template to be joined with `templatesDir` and used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to `receipt.stm`). If `jobData` contains a `template` value, it will be used instead of the `defaultTemplate`.
+* `templatesDir`: string which will configure the directory to be joined with either the `defaultTemplate` or `jobData.template` and used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to an empty string).
 
 ## Examples
 

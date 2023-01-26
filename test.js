@@ -67,7 +67,7 @@ test('get job, success', async (t) => {
   fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, {
     getJobData: (token) => ({ token }),
-    templatesDir: '__fixtures__/templates/'
+    templatesDir: 'examples/templates/'
   })
 
   await fastify.ready()
@@ -80,7 +80,7 @@ test('get job, success', async (t) => {
   t.is(response.statusCode, 200)
   t.is(response.statusMessage, 'OK')
   t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
-  t.true(response.body.includes('receipt.stm'))
+  t.true(response.body.includes('Receipt'))
 })
 
 test('get job, not found', async (t) => {
@@ -103,14 +103,14 @@ test('get job, not found', async (t) => {
 })
 
 test('get job, should merge templatesDir with templateName if present', async (t) => {
-  const jobToken = 'ABC123'
+  const jobToken = '123ABC'
 
   const fastify = Fastify()
 
   fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, {
-    getJobData: (token) => ({ templateName: 'receipt2.stm', token }),
-    templatesDir: '__fixtures__/templates/'
+    getJobData: (token) => ({ template: 'autotelic.stm', token }),
+    templatesDir: 'examples/templates/'
   })
 
   await fastify.ready()
@@ -123,7 +123,7 @@ test('get job, should merge templatesDir with templateName if present', async (t
   t.is(response.statusCode, 200)
   t.is(response.statusMessage, 'OK')
   t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
-  t.true(response.body.includes('receipt2.stm'))
+  t.true(response.body.includes('Autotelic'))
 })
 
 test('delete job, success', async (t) => {
@@ -236,4 +236,30 @@ test('should prefix routes when supplied with a routePrefix opt', async t => {
   })
 
   t.is(noPrefixResponse.statusCode, 404)
+})
+
+test('should use the configured defaultTemplate', async (t) => {
+  const jobToken = '123ABC'
+
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    getJobData: (token) => ({ token }),
+    templatesDir: 'examples/templates/',
+    defaultTemplate: 'autotelic.stm'
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: `/?token=${jobToken}`
+  })
+
+  t.is(response.statusCode, 200)
+  t.is(response.statusMessage, 'OK')
+  t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
+  t.true(response.body.includes('Autotelic'))
+  t.false(response.body.includes('Receipt'))
 })
