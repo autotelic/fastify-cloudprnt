@@ -10,7 +10,7 @@ The npm postinstall script has been removed as it fails on the GH action runner.
 
 ```js
 import fastifyCloudPrnt from '@autotelic/fastify-cloudprnt'
-import view from '@fastify/view'
+import view from '@fastify/point-of-view'
 
 export default async function basic (fastify, options) {
   // @fastify/view must be registered and available before fastify/view
@@ -57,7 +57,9 @@ _@autotelic/fastify-cloudprnt_ exports a fastify plugin. When registered the plu
 * `getJob: () => token`: method that returns the url-safe string `token` for the next available print job on the queue.
 * `getJobData: (token) => object`: method that returns the data object for the job enqueued with the url-safe string `token`.
 * `deleteJob: (token) => any`: method that deletes the job enqueued with the url-safe string `token` from the print queue.
-* `routePrefix: string`: string which will configure a prefix for all cloudprint routes.
+* `routePrefix: string`: string which will configure a prefix for all cloudprnt routes.
+* `defaultTemplateName`: string which will configure the default template name to be joined with `templatesDir` and used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to `receipt.stm`). If `jobData` contains a `templateName`, it will be used instead of the `defaultTemplateName`.
+* `templatesDir`: string which will configure the directory to be joined with either the `defaultTemplateName` or `jobData.templateName` used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to an empty string).
 
 ## Examples
 
