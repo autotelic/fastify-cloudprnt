@@ -1,0 +1,4 @@
+[magnify: width 1; height 1]
+[column: left template name: receipt2.stm]
+[column: left token: {{ token }}]
+[cut: feed; partial]

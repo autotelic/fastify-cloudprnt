@@ -1,10 +1,10 @@
-import test from 'ava'
-import sinon from 'sinon'
-import Fastify from 'fastify'
-import view from '@fastify/view'
-import nunjucks from 'nunjucks'
+const test = require('ava')
+const sinon = require('sinon')
+const Fastify = require('fastify')
+const view = require('point-of-view')
+const nunjucks = require('nunjucks')
 
-import fastifyCloudPrnt, { defaultOptions } from './index.js'
+const { default: fastifyCloudPrnt, defaultOptions } = require('./index.js')
 
 const defaultViewOpts = { engine: { nunjucks } }
 
@@ -64,14 +64,12 @@ test('get job, success', async (t) => {
   const jobToken = 'ABC123'
   const fastify = Fastify()
 
-  fastify.register(view, {
-    ...defaultViewOpts,
-    root: './examples'
-  })
+  fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, {
-    getJobData: (token) => ({}),
-    viewOptions: { root: './examples' }
+    getJobData: (token) => ({ token }),
+    templatesDir: '__fixtures__/templates/'
   })
+
   await fastify.ready()
 
   const response = await fastify.inject({
@@ -82,6 +80,7 @@ test('get job, success', async (t) => {
   t.is(response.statusCode, 200)
   t.is(response.statusMessage, 'OK')
   t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
+  t.true(response.body.includes('receipt.stm'))
 })
 
 test('get job, not found', async (t) => {
@@ -101,6 +100,30 @@ test('get job, not found', async (t) => {
 
   t.is(response.statusCode, 404)
   t.is(response.headers['content-type'], 'text/plain; charset=utf-8')
+})
+
+test('get job, should merge templatesDir with templateName if present', async (t) => {
+  const jobToken = 'ABC123'
+
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    getJobData: (token) => ({ templateName: 'receipt2.stm', token }),
+    templatesDir: '__fixtures__/templates/'
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: `/?token=${jobToken}`
+  })
+
+  t.is(response.statusCode, 200)
+  t.is(response.statusMessage, 'OK')
+  t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
+  t.true(response.body.includes('receipt2.stm'))
 })
 
 test('delete job, success', async (t) => {
