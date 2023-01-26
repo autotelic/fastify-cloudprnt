@@ -20,7 +20,9 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     getJobData,
     queueJob,
     deleteJob,
-    routePrefix
+    routePrefix,
+    templatesDir = '',
+    defaultTemplateName = 'receipt.stm'
   } = {
     ...defaultOptions,
     ...options
@@ -30,7 +32,9 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     getJob,
     getJobData,
     queueJob,
-    deleteJob
+    deleteJob,
+    templatesDir,
+    defaultTemplateName
   })
 
   fastify.register(async function (f) {

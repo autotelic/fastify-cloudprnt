@@ -21,11 +21,20 @@ module.exports = {
   },
   handler: async function getJobHandler (request, reply) {
     const { token } = request.query
-    const jobData = await this.cloudPrnt.getJobData(token)
+    const {
+      getJobData,
+      defaultTemplateName,
+      templatesDir
+    } = this.cloudPrnt
+
+    const jobData = await getJobData(token)
     if (jobData === null) {
       return reply.code(404).send('Job not found')
     }
-    const renderedJob = await this.view('templates/receipt.stm', jobData)
+
+    const templateName = jobData.templateName || defaultTemplateName
+    const templatePath = path.join(templatesDir, templateName)
+    const renderedJob = await this.view(templatePath, jobData)
 
     const fileName = `/tmp/${token}.stm`
     fs.writeFileSync(fileName, renderedJob, { flag: 'w+' })
