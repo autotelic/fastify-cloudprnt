@@ -1,21 +1,20 @@
-import { createClient } from 'redis'
-import view from '@fastify/view'
-import nunjucks from 'nunjucks'
+const { createClient } = require('redis')
+const view = require('point-of-view')
+const nunjucks = require('nunjucks')
 
-import fastifyCloudPrnt from '../../index.js'
+const fastifyCloudPrnt = require('../../index.js')
 
 const JOB_DATA = 'printJobData'
 const PRINT_QUEUE = 'printJobQueue'
 const REDIS_URL = process.env.REDIS_URL
 
-export default async function basic (fastify, options) {
+module.exports = async function redis (fastify, options) {
   // redis connection url defaults to localhost on port 6379
   const redis = createClient({ url: REDIS_URL })
   await redis.connect()
 
   await fastify.register(view, {
-    engine: { nunjucks },
-    root: './examples'
+    engine: { nunjucks }
   })
 
   await fastify.register(fastifyCloudPrnt, {
@@ -39,6 +38,8 @@ export default async function basic (fastify, options) {
       const deletedPrintJob = await redis.LREM(PRINT_QUEUE, 1, token)
 
       return deletedPrintJob > 0
-    }
+    },
+    routePrefix: '/cloud-prnt',
+    templatesDir: 'examples/templates'
   })
 }
