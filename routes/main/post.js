@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   method: 'POST',
   url: '/',
   schema: {

@@ -1,7 +1,8 @@
-import fs from 'fs'
-import { execaCommand } from 'execa'
+const fs = require('fs')
+const path = require('path')
+const cp = require('child_process')
 
-export default {
+module.exports = {
   method: 'GET',
   url: '/',
   schema: {
@@ -30,13 +31,16 @@ export default {
     fs.writeFileSync(fileName, renderedJob, { flag: 'w+' })
     const mimeType = 'application/vnd.star.starprntcore'
 
-    const subprocess = await execaCommand(
-      `cputil decode ${mimeType} ${fileName} -`,
-      { encoding: null }
+    const prntCommandData = cp.execSync(
+        `cputil decode ${mimeType} ${fileName} -`,
+        {
+          encoding: null,
+          stdio: ['ignore', 'pipe', 'pipe']
+        }
     )
 
     return reply
       .type(mimeType)
-      .send(subprocess.stdout)
+      .send(prntCommandData)
   }
 }

@@ -1,13 +1,13 @@
 'use strict'
 
-import fp from 'fastify-plugin'
+const fp = require('fastify-plugin')
 
-import pollRoute from './routes/main/post.js'
-import getJobRoute from './routes/main/get.js'
-import queueJobRoute from './routes/job/post.js'
-import deleteJobRoute from './routes/main/delete.js'
+const pollRoute = require('./routes/main/post.js')
+const getJobRoute = require('./routes/main/get.js')
+const queueJobRoute = require('./routes/job/post.js')
+const deleteJobRoute = require('./routes/main/delete.js')
 
-export const defaultOptions = {
+const defaultOptions = {
   getJob: () => null,
   getJobData: () => ({}),
   queueJob: () => false,
@@ -41,8 +41,11 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
   }, { prefix: routePrefix })
 }
 
-export default fp(fastifyCloudPrnt, {
-  name: 'fastify-plugin',
-  decorators: ['view'],
-  dependencies: ['@fastify/view']
-})
+module.exports = {
+  default: fp(fastifyCloudPrnt, {
+    name: 'fastify-plugin',
+    decorators: ['view'],
+    dependencies: ['point-of-view']
+  }),
+  defaultOptions
+}
