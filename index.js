@@ -45,11 +45,8 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
   }, { prefix: routePrefix })
 }
 
-module.exports = {
-  default: fp(fastifyCloudPrnt, {
-    name: 'fastify-plugin',
-    decorators: ['view'],
-    dependencies: ['point-of-view']
-  }),
-  defaultOptions
-}
+module.exports = fp(fastifyCloudPrnt, {
+  name: 'fastify-plugin',
+  decorators: ['view'],
+  dependencies: ['point-of-view']
+})

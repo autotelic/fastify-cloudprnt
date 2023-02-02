@@ -4,15 +4,21 @@ const Fastify = require('fastify')
 const view = require('point-of-view')
 const nunjucks = require('nunjucks')
 
-const { default: fastifyCloudPrnt, defaultOptions } = require('./index.js')
+const fastifyCloudPrnt = require('./index.js')
 
 const defaultViewOpts = { engine: { nunjucks } }
 
 test('default options', async (t) => {
-  t.deepEqual(defaultOptions.getJobData(), {})
-  t.is(defaultOptions.getJob(), null)
-  t.false(defaultOptions.queueJob())
-  t.false(defaultOptions.deleteJob())
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt)
+  await fastify.ready()
+
+  t.deepEqual(fastify.cloudPrnt.getJobData(), {})
+  t.is(fastify.cloudPrnt.getJob(), null)
+  t.false(fastify.cloudPrnt.queueJob())
+  t.false(fastify.cloudPrnt.deleteJob())
 })
 
 test('client poll, no job ready', async (t) => {
