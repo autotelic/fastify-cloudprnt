@@ -1,4 +1,4 @@
-const fs = require('fs')
+const { promises: fs } = require('fs')
 const path = require('path')
 const cp = require('child_process')
 
@@ -36,17 +36,19 @@ module.exports = {
     const templatePath = path.join(templatesDir, template)
     const renderedJob = await this.view(templatePath, jobData)
 
-    const fileName = `/tmp/${token}.stm`
-    fs.writeFileSync(fileName, renderedJob, { flag: 'w+' })
+    const printFilePath = `/tmp/${token}.stm`
+    await fs.writeFile(printFilePath, renderedJob, { flag: 'w+' })
     const mimeType = 'application/vnd.star.starprntcore'
 
     const prntCommandData = cp.execSync(
-        `cputil decode ${mimeType} ${fileName} -`,
+        `cputil decode ${mimeType} ${printFilePath} -`,
         {
           encoding: null,
           stdio: ['ignore', 'pipe', 'pipe']
         }
     )
+
+    await fs.unlink(printFilePath)
 
     return reply
       .type(mimeType)

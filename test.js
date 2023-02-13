@@ -3,6 +3,7 @@ const sinon = require('sinon')
 const Fastify = require('fastify')
 const view = require('point-of-view')
 const nunjucks = require('nunjucks')
+const { promises: fs } = require('fs')
 
 const fastifyCloudPrnt = require('./index.js')
 
@@ -87,6 +88,10 @@ test('get job, success', async (t) => {
   t.is(response.statusMessage, 'OK')
   t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
   t.true(response.body.includes('Receipt'))
+
+  // assert the rendered stm file is deleted
+  const err = await t.throwsAsync(fs.access('/tmp/ABC123.stm'))
+  t.is(err.code, 'ENOENT')
 })
 
 test('get job, not found', async (t) => {
@@ -245,7 +250,7 @@ test('should prefix routes when supplied with a routePrefix opt', async t => {
 })
 
 test('should use the configured defaultTemplate', async (t) => {
-  const jobToken = '123ABC'
+  const jobToken = 'XYZ123'
 
   const fastify = Fastify()
 
