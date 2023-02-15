@@ -274,3 +274,51 @@ test('should use the configured defaultTemplate', async (t) => {
   t.true(response.body.includes('Autotelic'))
   t.false(response.body.includes('Receipt'))
 })
+
+test('should use the configured errorHandler', async (t) => {
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    errorHandler: function (err, req, reply) {
+      reply
+        .code(200)
+        .send(err.message)
+    },
+    getJobData: async function () {
+      throw new Error('test error')
+    }
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: '/?token=foo'
+  })
+
+  t.is(response.statusCode, 200)
+  t.is(response.statusMessage, 'OK')
+  t.is(response.body, 'test error')
+})
+
+test('should use the default errorhHandler if not configured', async (t) => {
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    getJobData: async function () {
+      throw new Error('test error')
+    }
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: '/?token=foo'
+  })
+
+  t.is(response.statusCode, 500)
+  t.is(response.statusMessage, 'Internal Server Error')
+})

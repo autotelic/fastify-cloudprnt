@@ -38,8 +38,8 @@ module.exports = {
 
     const printFilePath = `/tmp/${token}.stm`
     await fs.writeFile(printFilePath, renderedJob, { flag: 'w+' })
-    const mimeType = 'application/vnd.star.starprntcore'
 
+    const mimeType = 'application/vnd.star.starprntcore'
     const prntCommandData = cp.execSync(
         `cputil decode ${mimeType} ${printFilePath} -`,
         {

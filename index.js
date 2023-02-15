@@ -28,7 +28,22 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     ...options
   }
 
-  fastify.decorate('cloudPrnt', {
+  function errorHandler (err, req, reply) {
+    if (typeof options.errorHandler === 'function') {
+      options.errorHandler(err, req, reply)
+    } else {
+      fastify.errorHandler(err, req, reply)
+    }
+  }
+
+  const routes = [
+    pollRoute,
+    getJobRoute,
+    queueJobRoute,
+    deleteJobRoute
+  ]
+
+  await fastify.decorate('cloudPrnt', {
     getJob,
     getJobData,
     queueJob,
@@ -38,10 +53,12 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
   })
 
   fastify.register(async function (f) {
-    f.route(pollRoute)
-    f.route(getJobRoute)
-    f.route(queueJobRoute)
-    f.route(deleteJobRoute)
+    routes.forEach(route => {
+      f.route({
+        ...route,
+        errorHandler
+      })
+    })
   }, { prefix: routePrefix })
 }
 
