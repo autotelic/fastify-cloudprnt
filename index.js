@@ -36,13 +36,9 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     ...options
   }
 
-  function errorHandler (err, req, reply) {
-    if (typeof options.errorHandler === 'function') {
-      options.errorHandler(err, req, reply)
-    } else {
-      fastify.errorHandler(err, req, reply)
-    }
-  }
+  const customErrorHandler = typeof options.errorHandler === 'function'
+    ? options.errorHandler
+    : undefined
 
   const routes = [
     pollRoute,
@@ -64,7 +60,7 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     routes.forEach(route => {
       f.route({
         ...route,
-        errorHandler
+        errorHandler: customErrorHandler
       })
     })
   }, { prefix: routePrefix })

@@ -60,7 +60,7 @@ _@autotelic/fastify-cloudprnt_ exports a fastify plugin. When registered the plu
 * `routePrefix: string`: string which will configure a prefix for all cloudprnt routes.
 * `defaultTemplate`: string which will configure the default template to be joined with `templatesDir` and used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to `receipt.stm`). If `jobData` contains a `template` value, it will be used instead of the `defaultTemplate`.
 * `templatesDir`: string which will configure the directory to be joined with either the `defaultTemplate` or `jobData.template` and used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to an empty string).
-* `errorHandler: (error, request, reply) => any`: function that overrides the default error handler for the scope of all fastify-cloudprnt routes.
+* `errorHandler: (error, request, reply) => any`: function that overrides the default error handler for the scope of all fastify-cloudprnt routes. If configured, `errorHandler` must conform to the fastify [route errorHandler](https://www.fastify.io/docs/v3.29.x/Reference/Routes/#routes-options).
 ## Examples
 
 ### Basic
