@@ -8,10 +8,18 @@ const queueJobRoute = require('./routes/job/post.js')
 const deleteJobRoute = require('./routes/main/delete.js')
 
 const defaultOptions = {
-  getJob: () => null,
-  getJobData: () => ({}),
-  queueJob: () => false,
-  deleteJob: () => false
+  getJob: async function () {
+    return null
+  },
+  getJobData: async function () {
+    return {}
+  },
+  queueJob: async function () {
+    return false
+  },
+  deleteJob: async function () {
+    return false
+  }
 }
 
 async function fastifyCloudPrnt (fastify, options = defaultOptions) {
@@ -65,5 +73,6 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
 module.exports = fp(fastifyCloudPrnt, {
   name: 'fastify-plugin',
   decorators: ['view'],
-  dependencies: ['point-of-view']
+  dependencies: ['point-of-view'],
+  fastify: '3.x'
 })

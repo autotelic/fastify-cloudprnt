@@ -16,10 +16,10 @@ test('default options', async (t) => {
   fastify.register(fastifyCloudPrnt)
   await fastify.ready()
 
-  t.deepEqual(fastify.cloudPrnt.getJobData(), {})
-  t.is(fastify.cloudPrnt.getJob(), null)
-  t.false(fastify.cloudPrnt.queueJob())
-  t.false(fastify.cloudPrnt.deleteJob())
+  t.deepEqual(await fastify.cloudPrnt.getJobData(), {})
+  t.is(await fastify.cloudPrnt.getJob(), null)
+  t.false(await fastify.cloudPrnt.queueJob())
+  t.false(await fastify.cloudPrnt.deleteJob())
 })
 
 test('client poll, no job ready', async (t) => {
