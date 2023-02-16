@@ -1,6 +1,7 @@
 const { promises: fs } = require('fs')
 const path = require('path')
 const cp = require('child_process')
+const os = require('os')
 
 module.exports = {
   method: 'GET',
@@ -36,7 +37,7 @@ module.exports = {
     const templatePath = path.join(templatesDir, template)
     const renderedJob = await this.view(templatePath, jobData)
 
-    const printFilePath = `/tmp/${token}.stm`
+    const printFilePath = path.join(os.tmpdir(), `${token}.stm`)
     await fs.writeFile(printFilePath, renderedJob, { flag: 'w+' })
 
     const mimeType = 'application/vnd.star.starprntcore'
