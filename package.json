@@ -40,7 +40,7 @@
     ]
   },
   "dependencies": {
-    "fastify-plugin": "^3.0.0"
+    "fastify-plugin": "^4.5.0"
   },
   "devDependencies": {
     "ava": "^4.3.0",
