@@ -1,7 +1,8 @@
-import fs from 'fs'
-import { execaCommand } from 'execa'
+const { promises: fs } = require('fs')
+const path = require('path')
+const cp = require('child_process')
 
-export default {
+module.exports = {
   method: 'GET',
   url: '/',
   schema: {
@@ -20,23 +21,37 @@ export default {
   },
   handler: async function getJobHandler (request, reply) {
     const { token } = request.query
-    const jobData = await this.cloudPrnt.getJobData(token)
+    const {
+      getJobData,
+      defaultTemplate,
+      templatesDir
+    } = this.cloudPrnt
+
+    const jobData = await getJobData(token)
     if (jobData === null) {
       return reply.code(404).send('Job not found')
     }
-    const renderedJob = await this.view('templates/receipt.stm', jobData)
 
-    const fileName = `/tmp/${token}.stm`
-    fs.writeFileSync(fileName, renderedJob, { flag: 'w+' })
+    const template = jobData.template || defaultTemplate
+    const templatePath = path.join(templatesDir, template)
+    const renderedJob = await this.view(templatePath, jobData)
+
+    const printFilePath = `/tmp/${token}.stm`
+    await fs.writeFile(printFilePath, renderedJob, { flag: 'w+' })
+
     const mimeType = 'application/vnd.star.starprntcore'
-
-    const subprocess = await execaCommand(
-      `cputil decode ${mimeType} ${fileName} -`,
-      { encoding: null }
+    const prntCommandData = cp.execSync(
+        `cputil decode ${mimeType} ${printFilePath} -`,
+        {
+          encoding: null,
+          stdio: ['ignore', 'pipe', 'pipe']
+        }
     )
+
+    await fs.unlink(printFilePath)
 
     return reply
       .type(mimeType)
-      .send(subprocess.stdout)
+      .send(prntCommandData)
   }
 }

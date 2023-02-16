@@ -1,0 +1,14 @@
+[underline: on]
+[space: count 48]
+[plain]
+[magnify: width 3; height 3]
+Autotelic
+[negative: on]
+Token:\
+[space: count 2]\
+{{ token }}
+[plain]
+
+[upperline: on]
+[space: count 48]
+[cut: feed; partial]

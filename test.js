@@ -1,18 +1,25 @@
-import test from 'ava'
-import sinon from 'sinon'
-import Fastify from 'fastify'
-import view from '@fastify/view'
-import nunjucks from 'nunjucks'
+const test = require('ava')
+const sinon = require('sinon')
+const Fastify = require('fastify')
+const view = require('point-of-view')
+const nunjucks = require('nunjucks')
+const { promises: fs } = require('fs')
 
-import fastifyCloudPrnt, { defaultOptions } from './index.js'
+const fastifyCloudPrnt = require('./index.js')
 
 const defaultViewOpts = { engine: { nunjucks } }
 
 test('default options', async (t) => {
-  t.deepEqual(defaultOptions.getJobData(), {})
-  t.is(defaultOptions.getJob(), null)
-  t.false(defaultOptions.queueJob())
-  t.false(defaultOptions.deleteJob())
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt)
+  await fastify.ready()
+
+  t.deepEqual(await fastify.cloudPrnt.getJobData(), {})
+  t.is(await fastify.cloudPrnt.getJob(), null)
+  t.false(await fastify.cloudPrnt.queueJob())
+  t.false(await fastify.cloudPrnt.deleteJob())
 })
 
 test('client poll, no job ready', async (t) => {
@@ -64,14 +71,12 @@ test('get job, success', async (t) => {
   const jobToken = 'ABC123'
   const fastify = Fastify()
 
-  fastify.register(view, {
-    ...defaultViewOpts,
-    root: './examples'
-  })
+  fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, {
-    getJobData: (token) => ({}),
-    viewOptions: { root: './examples' }
+    getJobData: (token) => ({ token }),
+    templatesDir: 'examples/templates/'
   })
+
   await fastify.ready()
 
   const response = await fastify.inject({
@@ -82,6 +87,11 @@ test('get job, success', async (t) => {
   t.is(response.statusCode, 200)
   t.is(response.statusMessage, 'OK')
   t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
+  t.true(response.body.includes('Receipt'))
+
+  // assert the rendered stm file is deleted
+  const err = await t.throwsAsync(fs.access('/tmp/ABC123.stm'))
+  t.is(err.code, 'ENOENT')
 })
 
 test('get job, not found', async (t) => {
@@ -101,6 +111,30 @@ test('get job, not found', async (t) => {
 
   t.is(response.statusCode, 404)
   t.is(response.headers['content-type'], 'text/plain; charset=utf-8')
+})
+
+test('get job, should merge templatesDir with templateName if present', async (t) => {
+  const jobToken = '123ABC'
+
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    getJobData: (token) => ({ template: 'autotelic.stm', token }),
+    templatesDir: 'examples/templates/'
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: `/?token=${jobToken}`
+  })
+
+  t.is(response.statusCode, 200)
+  t.is(response.statusMessage, 'OK')
+  t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
+  t.true(response.body.includes('Autotelic'))
 })
 
 test('delete job, success', async (t) => {
@@ -213,4 +247,78 @@ test('should prefix routes when supplied with a routePrefix opt', async t => {
   })
 
   t.is(noPrefixResponse.statusCode, 404)
+})
+
+test('should use the configured defaultTemplate', async (t) => {
+  const jobToken = 'XYZ123'
+
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    getJobData: (token) => ({ token }),
+    templatesDir: 'examples/templates/',
+    defaultTemplate: 'autotelic.stm'
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: `/?token=${jobToken}`
+  })
+
+  t.is(response.statusCode, 200)
+  t.is(response.statusMessage, 'OK')
+  t.is(response.headers['content-type'], 'application/vnd.star.starprntcore')
+  t.true(response.body.includes('Autotelic'))
+  t.false(response.body.includes('Receipt'))
+})
+
+test('should use the configured errorHandler', async (t) => {
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    errorHandler: function (err, req, reply) {
+      reply
+        .code(200)
+        .send(err.message)
+    },
+    getJobData: async function () {
+      throw new Error('test error')
+    }
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: '/?token=foo'
+  })
+
+  t.is(response.statusCode, 200)
+  t.is(response.statusMessage, 'OK')
+  t.is(response.body, 'test error')
+})
+
+test('should use the default errorhHandler if not configured', async (t) => {
+  const fastify = Fastify()
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, {
+    getJobData: async function () {
+      throw new Error('test error')
+    }
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: '/?token=foo'
+  })
+
+  t.is(response.statusCode, 500)
+  t.is(response.statusMessage, 'Internal Server Error')
 })

@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   method: 'POST',
   url: '/job',
   schema: {
@@ -22,7 +22,7 @@ export default {
   },
   handler: async function queueJobHandler (request, reply) {
     const { token, jobData } = request.body
-    this.cloudPrnt.queueJob(token, jobData)
+    await this.cloudPrnt.queueJob(token, jobData)
     return reply
       .code(201)
       .send({ token })

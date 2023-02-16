@@ -1,17 +1,25 @@
 'use strict'
 
-import fp from 'fastify-plugin'
+const fp = require('fastify-plugin')
 
-import pollRoute from './routes/main/post.js'
-import getJobRoute from './routes/main/get.js'
-import queueJobRoute from './routes/job/post.js'
-import deleteJobRoute from './routes/main/delete.js'
+const pollRoute = require('./routes/main/post.js')
+const getJobRoute = require('./routes/main/get.js')
+const queueJobRoute = require('./routes/job/post.js')
+const deleteJobRoute = require('./routes/main/delete.js')
 
-export const defaultOptions = {
-  getJob: () => null,
-  getJobData: () => ({}),
-  queueJob: () => false,
-  deleteJob: () => false
+const defaultOptions = {
+  getJob: async function () {
+    return null
+  },
+  getJobData: async function () {
+    return {}
+  },
+  queueJob: async function () {
+    return false
+  },
+  deleteJob: async function () {
+    return false
+  }
 }
 
 async function fastifyCloudPrnt (fastify, options = defaultOptions) {
@@ -20,29 +28,47 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     getJobData,
     queueJob,
     deleteJob,
-    routePrefix
+    routePrefix,
+    templatesDir = '',
+    defaultTemplate = 'receipt.stm'
   } = {
     ...defaultOptions,
     ...options
   }
 
-  fastify.decorate('cloudPrnt', {
+  const customErrorHandler = typeof options.errorHandler === 'function'
+    ? options.errorHandler
+    : undefined
+
+  const routes = [
+    pollRoute,
+    getJobRoute,
+    queueJobRoute,
+    deleteJobRoute
+  ]
+
+  await fastify.decorate('cloudPrnt', {
     getJob,
     getJobData,
     queueJob,
-    deleteJob
+    deleteJob,
+    templatesDir,
+    defaultTemplate
   })
 
   fastify.register(async function (f) {
-    f.route(pollRoute)
-    f.route(getJobRoute)
-    f.route(queueJobRoute)
-    f.route(deleteJobRoute)
+    routes.forEach(route => {
+      f.route({
+        ...route,
+        errorHandler: customErrorHandler
+      })
+    })
   }, { prefix: routePrefix })
 }
 
-export default fp(fastifyCloudPrnt, {
+module.exports = fp(fastifyCloudPrnt, {
   name: 'fastify-plugin',
   decorators: ['view'],
-  dependencies: ['@fastify/view']
+  dependencies: ['point-of-view'],
+  fastify: '3.x'
 })

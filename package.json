@@ -2,64 +2,64 @@
   "name": "@autotelic/fastify-cloudprnt",
   "version": "0.1.0",
   "description": "Fastify plugin to run a server following the Star Micronics CloudPRNT protocol.",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "example:basic": "docker compose -f docker-compose.basic-example.yaml up --build",
-    "example:basic:start": "fastify start -w -l info -P -o examples/basic/index.js",
-    "example:redis": "docker compose -f docker-compose.redis-example.yaml up --build",
-    "example:redis:start": "fastify start -w -l info -P -o examples/redis/index.js",
-    "test": "c8 --100 ava",
-    "test:docker": "docker compose -f docker-compose.test.yaml up",
-    "lint": "standard",
-    "fix": "standard --fix",
-    "validate": "npm run lint && npm run test"
-  },
-  "files": [
-    "index.js",
-    "routes"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/autotelic/fastify-cloudprnt.git"
-  },
   "keywords": [
     "fastify",
     "cloudprnt",
     "cloud-prnt",
     "star-micronics"
   ],
-  "author": "Autotelic Development Ltd <info@autotelic.com>",
-  "license": "MIT",
+  "homepage": "https://github.com/autotelic/fastify-cloudprnt#readme",
   "bugs": {
     "url": "https://github.com/autotelic/fastify-cloudprnt/issues"
   },
-  "homepage": "https://github.com/autotelic/fastify-cloudprnt#readme",
-  "dependencies": {
-    "execa": "^6.1.0",
-    "fastify-plugin": "^4.0.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/autotelic/fastify-cloudprnt.git"
   },
-  "devDependencies": {
-    "@fastify/view": "^7.0.0",
-    "ava": "^4.3.0",
-    "c8": "^7.10.0",
-    "fastify": "^4.3.0",
-    "fastify-cli": "^3.1.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
-    "node-cache": "^5.1.2",
-    "nunjucks": "^3.2.3",
-    "redis": "^4.5.1",
-    "sinon": "^14.0.0",
-    "standard": "^17.0.0"
-  },
-  "peerDependencies": {
-    "@fastify/view": "^7.0.0"
+  "license": "MIT",
+  "author": "Autotelic Development Ltd <info@autotelic.com>",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "routes"
+  ],
+  "scripts": {
+    "example:basic": "docker compose -f docker-compose.basic-example.yaml up",
+    "example:basic:start": "fastify start -w -l info -P -o examples/basic/index.js",
+    "example:redis": "docker compose -f docker-compose.redis-example.yaml up",
+    "example:redis:start": "fastify start -w -l info -P -o examples/redis/index.js",
+    "fix": "standard --fix",
+    "lint": "standard",
+    "test": "c8 --100 ava",
+    "test:docker": "docker compose -f docker-compose.test.yaml up",
+    "validate": "npm run lint && npm run test"
   },
   "lint-staged": {
     "*.{js,jsx}": [
       "npm run fix"
     ]
+  },
+  "dependencies": {
+    "fastify-plugin": "^3.0.0"
+  },
+  "devDependencies": {
+    "ava": "^4.3.0",
+    "c8": "^7.10.0",
+    "fastify": "^3.0.0",
+    "fastify-cli": "^3.0.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "node-cache": "^5.1.2",
+    "nunjucks": "^3.2.3",
+    "point-of-view": "^4.16.0",
+    "redis": "^4.5.1",
+    "sinon": "^14.0.0",
+    "standard": "^17.0.0"
+  },
+  "peerDependencies": {
+    "point-of-view": "^4.16.0"
+  },
+  "engines": {
+    "node": ">=12.x"
   }
 }
-
