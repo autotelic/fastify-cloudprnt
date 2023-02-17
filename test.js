@@ -275,18 +275,20 @@ test('should use the configured defaultTemplate', async (t) => {
   t.false(response.body.includes('Receipt'))
 })
 
-test('should use the configured errorHandler', async (t) => {
+test('should use the configured routerOpts', async (t) => {
   const fastify = Fastify()
 
   fastify.register(view, defaultViewOpts)
   fastify.register(fastifyCloudPrnt, {
-    errorHandler: function (err, req, reply) {
-      reply
-        .code(200)
-        .send(err.message)
-    },
-    getJobData: async function () {
-      throw new Error('test error')
+    routeOptions: {
+      errorHandler: async function (err, req, reply) {
+        reply
+          .code(200)
+          .send(err.message)
+      },
+      preHandler: async function (req, reply) {
+        throw new Error('preHandler')
+      }
     }
   })
 
@@ -299,7 +301,7 @@ test('should use the configured errorHandler', async (t) => {
 
   t.is(response.statusCode, 200)
   t.is(response.statusMessage, 'OK')
-  t.is(response.body, 'test error')
+  t.is(response.body, 'preHandler')
 })
 
 test('should use the default errorhHandler if not configured', async (t) => {
