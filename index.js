@@ -30,15 +30,12 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
     deleteJob,
     routePrefix,
     templatesDir = '',
+    routeOptions = {},
     defaultTemplate = 'receipt.stm'
   } = {
     ...defaultOptions,
     ...options
   }
-
-  const customErrorHandler = typeof options.errorHandler === 'function'
-    ? options.errorHandler
-    : undefined
 
   const routes = [
     pollRoute,
@@ -59,8 +56,8 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
   fastify.register(async function (f) {
     routes.forEach(route => {
       f.route({
-        ...route,
-        errorHandler: customErrorHandler
+        ...routeOptions,
+        ...route
       })
     })
   }, { prefix: routePrefix })
