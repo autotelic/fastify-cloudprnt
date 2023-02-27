@@ -1,7 +1,8 @@
 const { promises: fs } = require('fs')
 const path = require('path')
-const cp = require('child_process')
 const os = require('os')
+
+const asyncExec = require('../../helpers/asyncExec')
 
 module.exports = {
   method: 'GET',
@@ -36,19 +37,14 @@ module.exports = {
     const template = jobData.template || defaultTemplate
     const templatePath = path.join(templatesDir, template)
     const renderedJob = await this.view(templatePath, jobData)
+    const mimeType = 'application/vnd.star.starprntcore'
 
     const printFilePath = path.join(os.tmpdir(), `${token}.stm`)
     await fs.writeFile(printFilePath, renderedJob, { flag: 'w+' })
-
-    const mimeType = 'application/vnd.star.starprntcore'
-    const prntCommandData = cp.execSync(
-        `cputil decode ${mimeType} ${printFilePath} -`,
-        {
-          encoding: null,
-          stdio: ['ignore', 'pipe', 'pipe']
-        }
+    const prntCommandData = await asyncExec(
+      'cputil',
+      ['decode', mimeType, printFilePath, '-']
     )
-
     await fs.unlink(printFilePath)
 
     return reply
