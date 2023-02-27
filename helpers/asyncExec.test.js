@@ -1,5 +1,5 @@
 const test = require('ava')
-const asyncExec = require('./asyncExec')
+const asyncExec = require('./asyncExec.js')
 
 test('asyncExec should resolve to stdout buffer', async (t) => {
   const buffer = await asyncExec('echo', ['foo', 'bar'])

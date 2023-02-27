@@ -2,7 +2,7 @@ const { promises: fs } = require('fs')
 const path = require('path')
 const os = require('os')
 
-const asyncExec = require('../../helpers/asyncExec')
+const asyncExec = require('../../helpers/asyncExec.js')
 
 module.exports = {
   method: 'GET',
@@ -26,7 +26,8 @@ module.exports = {
     const {
       getJobData,
       defaultTemplate,
-      templatesDir
+      templatesDir,
+      formatPrntCommandData
     } = this.cloudPrnt
 
     const jobData = await getJobData(token)
@@ -39,13 +40,19 @@ module.exports = {
     const renderedJob = await this.view(templatePath, jobData)
     const mimeType = 'application/vnd.star.starprntcore'
 
-    const printFilePath = path.join(os.tmpdir(), `${token}.stm`)
-    await fs.writeFile(printFilePath, renderedJob, { flag: 'w+' })
-    const prntCommandData = await asyncExec(
-      'cputil',
-      ['decode', mimeType, printFilePath, '-']
-    )
-    await fs.unlink(printFilePath)
+    let prntCommandData
+
+    if (typeof formatPrntCommandData === 'function') {
+      prntCommandData = await formatPrntCommandData(renderedJob)
+    } else {
+      const printFilePath = path.join(os.tmpdir(), `${token}.stm`)
+      await fs.writeFile(printFilePath, renderedJob, { flag: 'w+' })
+      prntCommandData = await asyncExec(
+        'cputil',
+        ['decode', mimeType, printFilePath, '-']
+      )
+      await fs.unlink(printFilePath)
+    }
 
     return reply
       .type(mimeType)
