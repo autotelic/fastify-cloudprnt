@@ -21,7 +21,8 @@
   "main": "index.js",
   "files": [
     "index.js",
-    "routes"
+    "routes",
+    "helpers"
   ],
   "scripts": {
     "example:basic": "docker compose -f docker-compose.basic-example.yaml up",

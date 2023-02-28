@@ -137,6 +137,32 @@ test('get job, should merge templatesDir with templateName if present', async (t
   t.true(response.body.includes('Autotelic'))
 })
 
+test('get job, should use the configured formatPrntCommandData', async (t) => {
+  const jobToken = 'ABC123'
+  const fastify = Fastify()
+
+  const formatPrntCommandData = sinon.spy()
+  fastify.register(view, defaultViewOpts)
+
+  fastify.register(fastifyCloudPrnt, {
+    getJobData: (token) => ({ token }),
+    formatPrntCommandData,
+    templatesDir: 'examples/templates/'
+  })
+
+  await fastify.ready()
+  const viewSpy = sinon.spy(fastify, 'view')
+
+  const response = await fastify.inject({
+    method: 'GET',
+    url: `/?token=${jobToken}`
+  })
+
+  const renderedReceipt = await viewSpy.lastCall.returnValue
+  t.true(formatPrntCommandData.calledWith(renderedReceipt))
+  t.is(response.statusCode, 200)
+})
+
 test('delete job, success', async (t) => {
   const token = 'ABC123'
   const fastify = Fastify()
