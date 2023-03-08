@@ -57,9 +57,11 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
   })
 
   fastify.register(async function (f) {
-    // Some requests that are sent through the Star Micronics CloudPRNT protocol may be sent with the
-    // "application/x-www-form-urlencoded" content-type. As Fastify only natively supports 'application/json',
-    // we need to add an additional content-parser to handle  "application/x-www-form-urlencoded" requests.
+    /**
+     * Some requests that are sent through the Star Micronics CloudPRNT protocol may include "application/x-www-form-urlencoded" data.
+     * As Fastify only natively supports 'application/json', we need to add an additional content-parser to handle requests with a
+     * "application/x-www-form-urlencoded" content-type.
+     */
     f.addContentTypeParser(
       'application/x-www-form-urlencoded',
       { parseAs: 'buffer' },
