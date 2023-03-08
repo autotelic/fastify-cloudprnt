@@ -26,9 +26,9 @@
   ],
   "scripts": {
     "example:basic": "docker compose -f docker-compose.basic-example.yaml up",
-    "example:basic:start": "fastify start -w -l info -P -o examples/basic/index.js",
+    "example:basic:start": "fastify start -w -l debug -P -o examples/basic/index.js",
     "example:redis": "docker compose -f docker-compose.redis-example.yaml up",
-    "example:redis:start": "fastify start -w -l info -P -o examples/redis/index.js",
+    "example:redis:start": "fastify start -w -l debug -P -o examples/redis/index.js",
     "fix": "standard --fix",
     "lint": "standard",
     "test": "c8 --100 ava",
