@@ -67,7 +67,7 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
       { parseAs: 'buffer' },
       function contentParser (req, body, done) {
         f.log.debug(
-          `CloudPRNT request with "x-www-form-urlencoded" data received: ${req.method} ${req.routerPath}\n` +
+          `CloudPRNT request with "x-www-form-urlencoded" data received: ${req.method} ${req.url}\n` +
            body.toString()
         )
         done(null, qs.parse(body.toString()))
