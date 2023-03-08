@@ -356,3 +356,27 @@ test('should use the default errorhHandler if not configured', async (t) => {
   t.is(response.statusCode, 500)
   t.is(response.statusMessage, 'Internal Server Error')
 })
+
+test('should not error if request includes x-www-form-urlencoded data', async (t) => {
+  const token = 'ABC123'
+  const fastify = Fastify()
+
+  const deleteJob = sinon.stub().returns(true)
+
+  fastify.register(view, defaultViewOpts)
+  fastify.register(fastifyCloudPrnt, { deleteJob })
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'DELETE',
+    url: `/?token=${token}`,
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded'
+    },
+    body: Buffer.from('foo=bar')
+  })
+
+  t.true(deleteJob.calledWith(token))
+  t.is(response.statusCode, 200)
+  t.deepEqual(response.json(), { token })
+})

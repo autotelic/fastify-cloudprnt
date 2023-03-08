@@ -1,6 +1,7 @@
 'use strict'
 
 const fp = require('fastify-plugin')
+const qs = require('fast-querystring')
 
 const pollRoute = require('./routes/main/post.js')
 const getJobRoute = require('./routes/main/get.js')
@@ -56,6 +57,20 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
   })
 
   fastify.register(async function (f) {
+    // Some requests that are sent through the Star Micronics CloudPRNT protocol may be sent with the
+    // "application/x-www-form-urlencoded" content-type. As Fastify only natively supports 'application/json',
+    // we need to add an additional content-parser to handle  "application/x-www-form-urlencoded" requests.
+    f.addContentTypeParser(
+      'application/x-www-form-urlencoded',
+      { parseAs: 'buffer' },
+      function contentParser (req, body, done) {
+        f.log.debug(
+          `CloudPRNT request with "x-www-form-urlencoded" data received: ${req.method} ${req.routerPath}\n` +
+           body.toString()
+        )
+        done(null, qs.parse(body.toString()))
+      }
+    )
     routes.forEach(route => {
       f.route({
         ...routeOptions,
