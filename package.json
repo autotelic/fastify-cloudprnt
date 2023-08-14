@@ -50,7 +50,7 @@
     "fastify": "^3.0.0",
     "fastify-cli": "^3.0.0",
     "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
+    "lint-staged": "^14.0.0",
     "node-cache": "^5.1.2",
     "nunjucks": "^3.2.3",
     "point-of-view": "^4.16.0",
