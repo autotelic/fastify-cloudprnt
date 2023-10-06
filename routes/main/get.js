@@ -30,7 +30,7 @@ module.exports = {
       formatPrntCommandData
     } = this.cloudPrnt
 
-    const jobData = await getJobData(token)
+    const jobData = await getJobData(token, request)
     if (jobData === null) {
       return reply.code(404).send('Job not found')
     }

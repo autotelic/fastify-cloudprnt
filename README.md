@@ -54,9 +54,9 @@ Star Micronics provides a [Star Document Markup Designer](https://star-document-
 _@autotelic/fastify-cloudprnt_ exports a fastify plugin. When registered the plugin expects a configuration object:
 
 * `queueJob: (token, jobData) => any`: method that takes a url-safe string `token` and an object of data `jobData`, to be passed to [point-of-view](https://github.com/fastify/point-of-view#quick-start) for template rendering, and adds the job to the print queue.
-* `getJob: () => token`: method that returns the url-safe string `token` for the next available print job on the queue.
-* `getJobData: (token) => object`: method that returns the data object for the job enqueued with the url-safe string `token`.
-* `deleteJob: (token) => any`: method that deletes the job enqueued with the url-safe string `token` from the print queue.
+* `getJob: (request) => token`: method that returns the url-safe string `token` for the next available print job on the queue. `request` is the fastify request object.
+* `getJobData: (token, request) => object`: method that returns the data object for the job enqueued with the url-safe string `token`. `request` is the fastify request object.
+* `deleteJob: (token, request) => any`: method that deletes the job enqueued with the url-safe string `token` from the print queue. `request` is the fastify request object.
 * `routePrefix: string`: string which will configure a prefix for all cloudprnt routes.
 * `defaultTemplate`: string which will configure the default template to be joined with `templatesDir` and used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to `receipt.stm`). If `jobData` contains a `template` value, it will be used instead of the `defaultTemplate`.
 * `templatesDir`: string which will configure the directory to be joined with either the `defaultTemplate` or `jobData.template` and used by [`@fastify/point-of-view`](https://github.com/fastify/point-of-view/tree/v3.x) to render the template (default to an empty string).
