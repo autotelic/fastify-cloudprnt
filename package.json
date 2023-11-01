@@ -55,7 +55,7 @@
     "nunjucks": "^3.2.3",
     "point-of-view": "^4.16.0",
     "redis": "^4.5.1",
-    "sinon": "^15.0.1",
+    "sinon": "^17.0.1",
     "standard": "^17.0.0"
   },
   "peerDependencies": {
