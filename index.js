@@ -85,6 +85,6 @@ async function fastifyCloudPrnt (fastify, options = defaultOptions) {
 module.exports = fp(fastifyCloudPrnt, {
   name: 'fastify-plugin',
   decorators: ['view'],
-  dependencies: ['point-of-view'],
-  fastify: '3.x'
+  dependencies: ['@fastify/view'],
+  fastify: '4.x'
 })

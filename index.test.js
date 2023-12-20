@@ -1,7 +1,7 @@
 const test = require('ava')
 const sinon = require('sinon')
 const Fastify = require('fastify')
-const view = require('point-of-view')
+const view = require('@fastify/view')
 const nunjucks = require('nunjucks')
 const { promises: fs } = require('fs')
 
